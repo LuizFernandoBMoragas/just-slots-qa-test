@@ -1,6 +1,6 @@
 Slot Machine Game
 
-This is a simple **Slot Machine** game built with **PixiJS** and **TypeScript**, featuring spinning reels, win animations, and sound effects. The project also includes automated end-to-end tests using **Playwright** and **Cucumber (BDD)** — emphasizing quality assurance best practices.
+This is a simple **Slot Machine** game built with PixiJS and TypeScript, featuring spinning reels, win animations, and sound effects. The project also includes automated end-to-end tests using Playwright and Cucumber (BDD) — emphasizing quality assurance best practices.
 
 ---
 
