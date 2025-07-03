@@ -10,6 +10,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "howler": "^2.2.4",
     "pixi-spine": "^4.0.4",
     "pixi.js": "^7.3.2"
   },

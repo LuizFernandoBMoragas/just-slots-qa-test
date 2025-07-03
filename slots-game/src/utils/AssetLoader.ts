@@ -79,7 +79,13 @@ export class AssetLoader {
     private async loadSounds(): Promise<void> {
         try {
             SOUNDS.forEach(soundFile => {
-                sound.add(soundFile.split('.')[0], SOUNDS_PATH + soundFile);
+                // Creates alias by removing file extension, converting to lowercase, and replacing spaces with hyphens
+                const alias = soundFile
+                    .replace(/\.[^/.]+$/, '')   // Remove the file extension
+                    .toLowerCase()              // convert to lowercase
+                    .replace(/\s+/g, '-');      // replace spaces with hyphen
+
+                sound.add(alias, SOUNDS_PATH + soundFile);
             });
         } catch (error) {
             console.error('Error loading sounds:', error);
