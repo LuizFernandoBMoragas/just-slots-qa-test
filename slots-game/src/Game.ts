@@ -40,6 +40,9 @@ export class Game {
             this.slotMachine = new SlotMachine(this.app);
             this.app.stage.addChild(this.slotMachine.container);
 
+            //Expose slotMachine for testing and inspection via Playwright
+            (window as any).slotMachine = this.slotMachine;
+
             this.ui = new UI(this.app, this.slotMachine);
             this.app.stage.addChild(this.ui.container);
 

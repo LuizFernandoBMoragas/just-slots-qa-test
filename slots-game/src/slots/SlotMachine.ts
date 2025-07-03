@@ -3,7 +3,7 @@ import 'pixi-spine';
 import { Reel } from './Reel';
 import { sound } from '../utils/sound';
 import { AssetLoader } from '../utils/AssetLoader';
-import {Spine} from "pixi-spine";
+import { Spine } from "pixi-spine";
 
 const REEL_COUNT = 4;
 const SYMBOLS_PER_REEL = 6;
@@ -70,8 +70,8 @@ export class SlotMachine {
         }
     }
 
-    public spin(): void {
-        if (this.isSpinning) return;
+    public spin(): Promise<void> {
+        if (this.isSpinning) return Promise.resolve();
 
         this.isSpinning = true;
 
@@ -84,42 +84,40 @@ export class SlotMachine {
             this.spinButton.interactive = false;
         }
 
+        // Start spinning each reel with staggered delay
         for (let i = 0; i < this.reels.length; i++) {
             setTimeout(() => {
                 this.reels[i].startSpin();
             }, i * 200);
         }
 
-        // Stop all reels after a delay
-        setTimeout(() => {
-            this.stopSpin();
-        }, 500 + (this.reels.length - 1) * 200);
+        return new Promise((resolve) => {
+            // Stop reels sequentially
+            for (let i = 0; i < this.reels.length; i++) {
+                setTimeout(() => {
+                    this.reels[i].stopSpin();
 
-    }
+                    // When last reel stops, finalize spin
+                    if (i === this.reels.length - 1) {
+                        setTimeout(() => {
+                            this.checkWin();
+                            this.isSpinning = false;
 
-    private stopSpin(): void {
-        for (let i = 0; i < this.reels.length; i++) {
-            setTimeout(() => {
-                this.reels[i].stopSpin();
+                            if (this.spinButton) {
+                                this.spinButton.texture = AssetLoader.getTexture('button_spin.png');
+                                this.spinButton.interactive = true;
+                            }
 
-                // If this is the last reel, check for wins and enable spin button
-                if (i === this.reels.length - 1) {
-                    setTimeout(() => {
-                        this.checkWin();
-                        this.isSpinning = false;
-
-                        if (this.spinButton) {
-                            this.spinButton.texture = AssetLoader.getTexture('button_spin.png');
-                            this.spinButton.interactive = true;
-                        }
-                    }, 500);
-                }
-            }, i * 400);
-        }
+                            resolve();
+                        }, 500); // wait a bit for stop animation to show
+                    }
+                }, i * 400);
+            }
+        });
     }
 
     private checkWin(): void {
-        const randomWin = Math.random() < 0.3; // 30% chance de vitória
+        const randomWin = Math.random() < 0.3; // 30% chance to win
 
         if (randomWin) {
             sound.play('win');
@@ -145,7 +143,6 @@ export class SlotMachine {
         }
     }
 
-
     public setSpinButton(button: PIXI.Sprite): void {
         this.spinButton = button;
     }
@@ -156,9 +153,8 @@ export class SlotMachine {
             if (frameSpineData) {
                 this.frameSpine = new Spine(frameSpineData.spineData);
 
-                // Posiciona o frame centralizado sobre os rolos (horizontalmente e verticalmente)
+                // Position frame centered over reels
                 this.frameSpine.x = (SYMBOL_SIZE * SYMBOLS_PER_REEL) / 2;
-
                 this.frameSpine.y = (REEL_HEIGHT * REEL_COUNT + REEL_SPACING * (REEL_COUNT - 1)) / 2;
 
                 if (this.frameSpine.state.hasAnimation('idle')) {
@@ -172,7 +168,7 @@ export class SlotMachine {
             if (winSpineData) {
                 this.winAnimation = new Spine(winSpineData.spineData);
 
-                // Posiciona a animação de vitória no centro da máquina, ajustando x e y corretamente
+                // Position win animation in center
                 this.winAnimation.x = (SYMBOL_SIZE * SYMBOLS_PER_REEL) / 2;
                 this.winAnimation.y = (REEL_HEIGHT * REEL_COUNT + REEL_SPACING * (REEL_COUNT - 1)) / 2;
 
@@ -184,5 +180,5 @@ export class SlotMachine {
             console.error('Error initializing spine animations:', error);
         }
     }
-
+    
 }

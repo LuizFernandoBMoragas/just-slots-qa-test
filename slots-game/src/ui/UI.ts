@@ -42,10 +42,28 @@ export class UI {
         }
     }
 
-    private onSpinButtonClick(): void {
+    private async onSpinButtonClick(): Promise<void> {
         sound.play('Spin button');
 
-        this.slotMachine.spin();
+        // Update attribute before starting the spin
+        this.updateSpinningAttr(true);
+
+        // Wait for the spin to finish (slotMachine.spin must return Promise)
+        await this.slotMachine.spin();
+
+        // Update attribute after spin ends
+        this.updateSpinningAttr(false);
+    }
+
+    private updateSpinningAttr(isSpinning: boolean): void {
+        const gameContainer = document.getElementById('game-container');
+        if (!gameContainer) return;
+
+        if (isSpinning) {
+            gameContainer.setAttribute('data-spinning', 'true');
+        } else {
+            gameContainer.removeAttribute('data-spinning');
+        }
     }
 
     private onButtonOver(event: PIXI.FederatedPointerEvent): void {
