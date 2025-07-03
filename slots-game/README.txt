@@ -1,52 +1,98 @@
+Slot Machine Game
 
-# Technical Test Instructions
+This is a simple **Slot Machine** game built with **PixiJS** and **TypeScript**, featuring spinning reels, win animations, and sound effects. The project also includes automated end-to-end tests using **Playwright** and **Cucumber (BDD)** — emphasizing quality assurance best practices.
 
-Welcome to the technical test! Please read the following instructions carefully before starting the implementation.
+---
 
-## Tasks to Complete
+Features
 
-1. **Implement all TODOs**
-   - The test includes several `TODO` comments throughout the code. Ensure each one is addressed and properly implemented as part of the test.
+- 4 reels with multiple symbols each
+- Spinning animation with staggered reel starts and stops
+- Win animation triggered randomly after spin
+- Sound effects for spinning and winning
+- Automated UI tests covering:
+  - Spin button interaction
+  - Reels spinning state
+  - Win animation appearance and disappearance
 
-2. **Reels Implementation**
-   - Implement the functionality for reels with **horizontal spinning**. Ensure the spinning logic is smooth, performant, and aligns with the expected behaviour.
+---
 
-3. **Sound Player**
-   - Implement the basic **sound player** functionality.
+Getting Started
 
-4. **Bonus Points**
-   - **Refactoring**: Improve the code structure and maintainability where possible. Follow modern coding best practices to enhance readability and performance.
-   - **Unit Tests**: Add unit tests to key parts of your implementation to ensure code correctness and stability.
-   - **Consistent TypeScript Code**: Write consistent and idiomatic TypeScript code across all files. Adhere to the project's style guidelines and conventions.
+Prerequisites
 
-## Guidelines
+- Node.js (v16+ recommended)
+- npm or yarn
 
-1. **Code Quality**:
-   - Follow the principles of clean code. Ensure well-organised, scalable, and reusable code. Add appropriate inline comments and documentation where necessary.
+Installation
 
-2. **Testing**:
-   - Write unit tests where applicable. Use a testing framework of your choice (e.g., Jest, Mocha) for these tests.
+1. Clone the repository:
+   git clone https://github.com/yourusername/slot-machine.git
+   cd slot-machine
 
-3. **Tools**:
-   - Use the provided TypeScript framework and adhere to its conventions. All code should be written in TypeScript.
+2. Install dependencies:
+   npm install
 
-4. **Submission**:
-   - Ensure all functionality works as expected.
-   - Initialise a local Git repository for your project. Ensure your work is committed in incremental and descriptive commits,
-   as the Git history will be evaluated.
-   - Include any necessary setup instructions in the documentation if additional tools or configuration are required.
+3. Start the local server:
+   npm run start
 
-## Evaluation Criteria
+4. Open your browser at http://localhost:9000 to play the game.
 
-Your submission will be evaluated on the following criteria:
-- Correct implementation of all required tasks (e.g., TODOs, reels horizontal spinning, sound player).
-- Code quality, readability, and maintainability.
-- Adherence to TypeScript practices and project conventions.
-- Bonus points for refactoring, unit tests, and additional enhancements not explicitly required.
+---
 
-## Notes
+Testing (QA Focus)
 
-- Aim for clean, efficient, and well-documented code.
-- Do not hesitate to ask questions if any part of the test is unclear.
+Automated testing is a critical part of this project, ensuring reliability and regression safety.
 
-Good luck, and happy coding!
+Test Frameworks & Tools
+
+- Playwright — for browser automation and interaction
+- Cucumber (BDD) — to define behavior-driven test scenarios in Gherkin syntax
+- TypeScript — for type safety in test code
+- Page Object Model — to encapsulate UI interaction logic, improving maintainability
+
+Test Coverage
+
+- Spin Button Functionality — verifies that clicking the spin button triggers reel spinning
+- Reels Spinning State — checks that reels correctly reflect the spinning state during play
+- Win Animation — asserts that the victory animation appears and disappears correctly after a win
+
+Running Tests
+
+Run all automated tests with:
+
+npm run test
+
+To run tests with detailed debugging output:
+
+npm run test:debug
+
+Test Implementation Highlights
+
+- Tests use DOM attribute checks (e.g., data-spinning) to assert reel states.
+- The visibility of the win animation is checked via a custom window flag exposed by the game.
+- Behavior-driven steps facilitate clear, human-readable test scenarios that can be extended easily.
+- The test suite can be expanded with mocks or API hooks to force win states for more deterministic testing.
+
+---
+
+Project Structure
+
+- src/ - Main game source code
+- src/pages/SlotMachinePage.ts - Playwright page object encapsulating UI actions
+- src/tests/features/ - Cucumber feature files (test scenarios)
+- src/tests/steps/ - Step definitions for tests
+- src/tests/support/ - Test setup and global hooks
+- src/assets
+- src/slots
+- src/UI
+- src/utils
+- src/Game.ts
+- src/index.html
+- src/index.ts
+
+---
+
+License
+
+MIT License © Luiz Fernando Barros Moragas

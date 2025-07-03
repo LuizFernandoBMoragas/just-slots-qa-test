@@ -43,7 +43,7 @@ export class SlotMachinePage {
             const winAnimation = document.querySelector('[data-win-animation]');
             if (!winAnimation) return false;
 
-      // A flag no window ajuda, mas aqui vamos garantir que o elemento existe e está visível
+            // ensure that the element exists and is visible
             const style = window.getComputedStyle(winAnimation);
             return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
         });
