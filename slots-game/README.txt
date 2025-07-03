@@ -61,7 +61,7 @@ Running Tests
 
 Run all automated tests with:
 
-npm run test
+npm run test:bdd
 
 To run tests with detailed debugging output:
 
