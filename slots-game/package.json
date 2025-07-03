@@ -6,13 +6,15 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack serve --mode development",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint src --ext .ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "pixi-spine": "^4.0.4",
     "pixi.js": "^7.3.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.2",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
     "copy-webpack-plugin": "^11.0.0",
