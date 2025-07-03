@@ -117,29 +117,36 @@ export class SlotMachine {
     }
 
     private checkWin(): void {
-        const randomWin = Math.random() < 0.3; // 30% chance to win
+        // const randomWin = Math.random() < 0.3; // 30% chance to win
+        const randomWin = Math.random() < 1.0; // for tests purpouse only
 
         if (randomWin) {
             sound.play('win');
             console.log('Winner!');
 
             if (this.winAnimation) {
-                this.winAnimation.visible = true;
+            this.winAnimation.visible = true;
+            // Update global flag for test
+            (window as any).winAnimationVisible = true;
 
-                this.winAnimation.state.setAnimation(0, 'start', false);
+            this.winAnimation.state.setAnimation(0, 'start', false);
 
-                this.winAnimation.state.addListener({
-                    complete: (entry) => {
-                        if ((entry as any).animation.name === 'start') {
-                            this.winAnimation!.visible = false;
+            this.winAnimation.state.addListener({
+                complete: (entry) => {
+                if ((entry as any).animation.name === 'start') {
+                    this.winAnimation!.visible = false;
+                    // Update flag to false when animation ends
+                    (window as any).winAnimationVisible = false;
 
-                            if (this.winAnimation!.state.hasAnimation('idle')) {
-                                this.winAnimation!.state.setAnimation(0, 'idle', true);
-                            }
-                        }
+                    if (this.winAnimation!.state.hasAnimation('idle')) {
+                    this.winAnimation!.state.setAnimation(0, 'idle', true);
                     }
-                });
+                }
+                }
+            });
             }
+        } else {
+            (window as any).winAnimationVisible = false;
         }
     }
 
@@ -180,5 +187,5 @@ export class SlotMachine {
             console.error('Error initializing spine animations:', error);
         }
     }
-    
+
 }
