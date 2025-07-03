@@ -27,7 +27,7 @@ Prerequisites
 Installation
 
 1. Clone the repository:
-   git clone https://github.com/yourusername/slot-machine.git
+   git clone https://github.com/LuizFernandoBMoragas/just-slots-qa-test.git
    cd slot-machine
 
 2. Install dependencies:
