@@ -119,18 +119,32 @@ export class SlotMachine {
     }
 
     private checkWin(): void {
-        // Simple win check - just for demonstration
-        const randomWin = Math.random() < 0.3; // 30% chance of winning
+        const randomWin = Math.random() < 0.3; // 30% chance de vitória
 
         if (randomWin) {
             sound.play('win');
             console.log('Winner!');
 
             if (this.winAnimation) {
-                // TODO: Play the win animation found in "big-boom-h" spine
+                this.winAnimation.visible = true;
+
+                this.winAnimation.state.setAnimation(0, 'start', false);
+
+                this.winAnimation.state.addListener({
+                    complete: (entry) => {
+                        if ((entry as any).animation.name === 'start') {
+                            this.winAnimation!.visible = false;
+
+                            if (this.winAnimation!.state.hasAnimation('idle')) {
+                                this.winAnimation!.state.setAnimation(0, 'idle', true);
+                            }
+                        }
+                    }
+                });
             }
         }
     }
+
 
     public setSpinButton(button: PIXI.Sprite): void {
         this.spinButton = button;
@@ -142,8 +156,10 @@ export class SlotMachine {
             if (frameSpineData) {
                 this.frameSpine = new Spine(frameSpineData.spineData);
 
-                this.frameSpine.y = (REEL_HEIGHT * REEL_COUNT + REEL_SPACING * (REEL_COUNT - 1)) / 2;
+                // Posiciona o frame centralizado sobre os rolos (horizontalmente e verticalmente)
                 this.frameSpine.x = (SYMBOL_SIZE * SYMBOLS_PER_REEL) / 2;
+
+                this.frameSpine.y = (REEL_HEIGHT * REEL_COUNT + REEL_SPACING * (REEL_COUNT - 1)) / 2;
 
                 if (this.frameSpine.state.hasAnimation('idle')) {
                     this.frameSpine.state.setAnimation(0, 'idle', true);
@@ -156,8 +172,9 @@ export class SlotMachine {
             if (winSpineData) {
                 this.winAnimation = new Spine(winSpineData.spineData);
 
-                this.winAnimation.x = (REEL_HEIGHT * REEL_COUNT + REEL_SPACING * (REEL_COUNT - 1)) / 2;
-                this.winAnimation.y = (SYMBOL_SIZE * SYMBOLS_PER_REEL) / 2;
+                // Posiciona a animação de vitória no centro da máquina, ajustando x e y corretamente
+                this.winAnimation.x = (SYMBOL_SIZE * SYMBOLS_PER_REEL) / 2;
+                this.winAnimation.y = (REEL_HEIGHT * REEL_COUNT + REEL_SPACING * (REEL_COUNT - 1)) / 2;
 
                 this.winAnimation.visible = false;
 
@@ -167,4 +184,5 @@ export class SlotMachine {
             console.error('Error initializing spine animations:', error);
         }
     }
+
 }
