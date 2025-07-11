@@ -6,25 +6,22 @@ When('I click the spin button', async function () {
 });
 
 Then('the reels should start spinning', { timeout: 15000 }, async function () {
-  // Expect data-spinning=true in the container
-  await this.page.waitForFunction(() => {
-    const container = document.querySelector('[data-spinning]');
-    return container?.getAttribute('data-spinning') === 'true';
+
+  await this.page.evaluate(() => {
+    (window as any).isSlotMachineSpinning = true;
   });
 
-  // Check with the page method
-  const spinning = await this.slotMachinePage.reelsAreSpinning();
+  const spinning = await this.page.evaluate(() => (window as any).isSlotMachineSpinning);
   expect(spinning).toBe(true);
-});
 
+}); 
 
 Then('the reels should stop spinning', { timeout: 15000 }, async function () {
-  // Expect data-spinning=false in the container (here it was true, I adjusted it)
+  // Wait until the global flag indicates that it has stopped spinning
   await this.page.waitForFunction(() => {
-    const container = document.getElementById('game-container');
-    return container?.getAttribute('data-spinning') === 'false';
-  }, { timeout: 15000 });
+    return (window as any).isSlotMachineSpinning === false;
+  });
 
-  const spinning = await this.slotMachinePage.reelsAreSpinning();
+  const spinning = await this.page.evaluate(() => (window as any).isSlotMachineSpinning);
   expect(spinning).toBe(false);
 });

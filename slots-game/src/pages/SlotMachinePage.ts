@@ -25,7 +25,7 @@ export class SlotMachinePage {
         const boundingBox = await this.spinButton.boundingBox();
         if (!boundingBox) throw new Error('Canvas not found to click on spin.');
 
-        const clickX = boundingBox.x + boundingBox.width / 2;
+        const clickX = boundingBox.x + boundingBox.width / 2;   // x position of the button according to UI.ts
         const clickY = boundingBox.y + boundingBox.height - 50; // Y position of the button according to UI.ts
 
         await this.page.mouse.click(clickX, clickY);
@@ -33,19 +33,13 @@ export class SlotMachinePage {
 
     async reelsAreSpinning(): Promise<boolean> {
         return await this.page.evaluate(() => {
-            const container = document.getElementById('game-container');
-            return container?.getAttribute('data-spinning') === 'true';
+            return (window as any).isSlotMachineSpinning === true;
         });
     }
-
+ 
     async isWinAnimationVisible(): Promise<boolean> {
         return await this.page.evaluate(() => {
-            const winAnimation = document.querySelector('[data-win-animation]');
-            if (!winAnimation) return false;
-
-            // ensure that the element exists and is visible
-            const style = window.getComputedStyle(winAnimation);
-            return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+            return (window as any).winAnimationVisible === true;
         });
     }
 }

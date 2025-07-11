@@ -34,6 +34,8 @@ export class SlotMachine {
         this.createReels();
 
         this.initSpineAnimations();
+
+        (window as any).isSlotMachineSpinning = false;
     }
 
     private createBackground(): void {
@@ -68,12 +70,15 @@ export class SlotMachine {
         for (const reel of this.reels) {
             reel.update(delta);
         }
+
+         (window as any).isSlotMachineSpinning = this.reels.some(reel => reel['speed'] > 0);
     }
 
     public spin(): Promise<void> {
         if (this.isSpinning) return Promise.resolve();
 
-        this.isSpinning = true;
+        this.isSpinning = true; 
+        (window as any).isSlotMachineSpinning = true;
 
         // Play spin sound
         sound.play('Reel spin');
@@ -102,7 +107,8 @@ export class SlotMachine {
                         setTimeout(() => {
                             this.checkWin();
                             this.isSpinning = false;
-
+                            (window as any).isSlotMachineSpinning = false;
+                            
                             if (this.spinButton) {
                                 this.spinButton.texture = AssetLoader.getTexture('button_spin.png');
                                 this.spinButton.interactive = true;
