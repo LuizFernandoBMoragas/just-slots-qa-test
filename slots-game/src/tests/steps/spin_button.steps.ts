@@ -19,7 +19,7 @@ Then('the reels should start spinning', { timeout: 15000 }, async function () {
 Then('the reels should stop spinning', { timeout: 15000 }, async function () {
   // Wait until the global flag indicates that it has stopped spinning
   await this.page.waitForFunction(() => {
-    return (window as any).isSlotMachineSpinning === false;
+    (window as any).isSlotMachineSpinning === false;
   });
 
   const spinning = await this.page.evaluate(() => (window as any).isSlotMachineSpinning);

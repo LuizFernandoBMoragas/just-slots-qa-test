@@ -33,7 +33,7 @@ export class SlotMachinePage {
 
     async reelsAreSpinning(): Promise<boolean> {
         return await this.page.evaluate(() => {
-            return (window as any).isSlotMachineSpinning === true;
+            return (window as any).isSlotMachineSpinning = true;
         });
     }
  
